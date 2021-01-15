@@ -1,5 +1,5 @@
 # jubilant-engine
-Algorithm practice
+Algorithm practices
 
 Algorithm practice from various sources :
 Hackerrank
