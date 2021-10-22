@@ -1,10 +1,15 @@
-//Union and Intersection using two-pointers
+//Union and Intersection using two-pointers algo on two sorted arrays
 
 #include <bits/stdc++.h>
 
-void arrayUnion(int[], int[], int, int);
-void arrayIntersection(int[], int[], int, int);
+//arrayUnion : Uses two pointer algo for storing union in extra space
+//arrayIntersection : Uses two pointer algo for storing intersection in extra space
+//printArray : To print on console
+void arrayUnion(std::vector<int>, std::vector<int>);
+void arrayIntersection(std::vector<int>, std::vector<int>);
+void printArray(std::vector<int>);
 
+//driver function starts
 int main()
 {
     std::ios_base::sync_with_stdio(false);
@@ -15,97 +20,121 @@ int main()
     freopen("output.txt", "w", stdout);
 #endif
 
+    //for multiple tests
     int tests;
     std::cin >> tests;
 
     while (tests--)
     {
-        int sizeA, sizeB;
-        std::cin >> sizeA >> sizeB;
-        int A[sizeA], B[sizeB];
+        //n:size of first arr
+        //m: size of second arr
+        //input: temp input for vector<int>
+        int n, m, input;
+        std::vector<int> arr_1, arr_2;
+
+        std::cin >> n >> m;
 
         //input
+        for (int i = 0; i < n; i++)
         {
-            for (int i = 0; i < sizeA; i++)
-            {
-                std::cin >> A[i];
-            }
-            for (int i = 0; i < sizeB; i++)
-            {
-                std::cin >> B[i];
-            }
+            std::cin >> input;
+            arr_1.push_back(input);
         }
 
-        arrayUnion(A, B, sizeA, sizeB);
-        arrayIntersection(A, B, sizeA, sizeB);
+        for (int i = 0; i < m; i++)
+        {
+            std::cin >> input;
+            arr_2.push_back(input);
+        }
+
+        //function calls for union and intersection
+        arrayUnion(arr_1, arr_2);
+        arrayIntersection(arr_1, arr_2);
     }
     return 0;
 }
+//driver function ends
 
-void arrayUnion(int A[], int B[], int sizeA, int sizeB)
+//perform union
+void arrayUnion(std::vector<int> arr_1, std::vector<int> arr_2)
 {
-    int result[sizeA + sizeB];
-    int i = 0, j = 0, k = 0;
+    std::vector<int> unionResult;
+    int i = 0, j = 0;
 
-    for (; i < sizeA && j < sizeB;)
+    //i iterates over arr_1
+    //j iterates over arr_2
+    //For both sorted vector<int>, push_back() the smaller from element b/w arr_1[i] and arr_2[j]
+    //If both elements are equal, push_back() the element and i++,j++;
+    for (; i < arr_1.size() && j < arr_2.size();)
     {
-        if (A[i] < B[j])
-        {
-            result[k++] = A[i++];
-        }
-        else if (A[i] > B[j])
-        {
-            result[k++] = B[j++];
-        }
+        if (arr_1[i] < arr_2[j])
+            unionResult.push_back(arr_1[i++]);
+
+        else if (arr_1[i] > arr_2[j])
+            unionResult.push_back(arr_2[j++]);
+
         else
         {
-            result[k++] = A[i++];
+            unionResult.push_back(arr_1[i++]);
             j++;
         }
     }
-    if (i == sizeA)
+
+    //to push_back() the remaining elements of the bigger array if any
+    if (i == arr_1.size())
     {
-        for (; j < sizeB; j++)
+        for (; j < arr_2.size(); j++)
         {
-            result[k++] = B[j];
+            unionResult.push_back(arr_2[j]);
         }
     }
-    else if (j == sizeB)
+    else if (j == arr_2.size())
     {
-        for (; i < sizeA; i++)
+        for (; i < arr_1.size(); i++)
         {
-            result[k++] = A[i];
+            unionResult.push_back(arr_1[i]);
         }
     }
+
     std::cout << "Union : ";
-    for (int it = 0; it < k; it++)
-    {
-        std::cout << result[it] << ' ';
-    }
+    printArray(unionResult);
     std::cout << std::endl;
     return;
 }
 
-void arrayIntersection(int A[], int B[], int sizeA, int sizeB)
+//perform intersection
+void arrayIntersection(std::vector<int> arr_1, std::vector<int> arr_2)
 {
-    int result[sizeA + sizeB];
-    int k = 0;
-    for (int i = 0, j = 0; i < sizeA && j < sizeB;)
+    std::vector<int> interResult;
+    int i = 0, j = 0, k = 0;
+
+    //i iterates over arr_1
+    //j iterates over arr_2
+    //For both elements equal, push_back() and i++,j++;
+    for (; i < arr_1.size() && j < arr_2.size();)
     {
-        if (A[i] < B[j])
+        if (arr_1[i] < arr_2[j])
             i++;
-        else if (A[i] > B[j])
+        else if (arr_1[i] > arr_2[j])
             j++;
         else
         {
-            result[k++] = A[i++];
+            interResult.push_back(arr_1[i++]);
             j++;
         }
     }
+
     std::cout << "Intersection : ";
-    for (int it = 0; it < k; it++)
-    {
-        std::cout << result[it] << ' ';
-    }
+    printArray(interResult);
     std::cout << std::endl;
+}
+
+//print vector<int>
+void printArray(std::vector<int> arr)
+{
+    for (std::vector<int>::iterator it = arr.begin(); it < arr.end(); it++)
+    {
+        std::cout << *it << ' ';
+    }
+    return;
 }
